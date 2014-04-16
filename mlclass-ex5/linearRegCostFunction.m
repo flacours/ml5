@@ -20,17 +20,35 @@ grad = zeros(size(theta));
 %
 
 
+Xt = X * theta;
+J = 1/(2*m) * (Xt - y)' * (Xt - y);
 
-
-
-
-
+reg = 0;
+n = length(theta);
+for(j = 2 : n)
+   reg += theta(j)^2;
+end;
+reg *= lambda/(2*m);
+J += reg;
 
 
 
 
 
 % =========================================================================
+
+for(i = 1 : m)
+   z = theta' * X(i,:)';
+   err = z - y(i);
+   partgrad = err * X(i,:)';
+   grad += partgrad;
+end;
+grad /= m;
+
+regGrad = theta * lambda/m;
+regGrad(1) = 0;
+
+grad += regGrad;
 
 grad = grad(:);
 
